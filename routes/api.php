@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Models\Event;
 
 
 /*
@@ -26,5 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::apiResource('/event', EventController::class);
+    Route::apiResource('/event', EventController::class)->except('show');
 });
+
+Route::get('/event/{slug}', [EventController::class, 'show']);
+Route::post('/register-user-event', [EventController::class, 'registerUserEvent']);
