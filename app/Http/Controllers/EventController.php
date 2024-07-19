@@ -17,7 +17,12 @@ class EventController extends Controller
    
     public function index(Request $request)
     {
-        return Event::paginate(8);
+        return Event::when($request->search, function($query) use($request) {
+            $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('content', 'like', '%' . $request->search . '%');
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(8);
     }
 
     public function store(EventStoreRequest $request)
